@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A'la Santa – Christmas Shop</title>
+
+<style>
+/* ------------------------------------------------------
+   GLOBAL STYLES
+------------------------------------------------------ */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background: #fff;
+    overflow-x: hidden;
+}
+
+/* LOGO */
+.logo {
+    font-size: 3.5rem;
+    font-weight: 900;
+    text-align: center;
+    padding: 25px 0;
+    background: linear-gradient(90deg, #b30000, #006600);
+    -webkit-background-clip: text;
+    color: transparent;
+    text-shadow: 3px 3px 18px rgba(0,0,0,0.4);
+    letter-spacing: 3px;
+}
+
+/* NAVIGATION */
+nav {
+    padding: 15px;
+    text-align: center;
+    background: repeating-linear-gradient(
+        45deg,
+        #ff0000, #ff0000 12px,
+        #ffffff 12px, #ffffff 24px
+    );
+}
+nav a {
+    color: black;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.25rem;
+    margin: 0 20px;
+}
+nav a:hover {
+    color: #006600;
+}
+
+/* COUNTDOWN */
+.countdown-container {
+    background: #b30000;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: bold;
+}
+#countdown {
+    font-size: 2.4rem;
+    margin-top: 10px;
+}
+
+/* SNOWFALL */
+.snowflake {
+    position: fixed;
+    top: -10px;
+    color: white;
+    font-size: 1.4rem;
+    pointer-events: none;
+    animation: fall linear infinite;
+    z-index: 9999;
+}
+@keyframes fall {
+    to { transform: translateY(110vh); }
+}
+
+/* BANNER */
+.banner {
+    height: 330px;
+    background-image: url("https://images.unsplash.com/photo-1543589077-47d81606c1bf");
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 3rem;
+    text-shadow: 4px 4px 12px black;
+}
+
+/* PRODUCT LAYOUT */
+.container {
+    width: 90%;
+    margin: 40px auto;
+}
+h2 {
+    color: #b30000;
+    border-left: 8px solid #006600;
+    padding-left: 12px;
+    margin-top: 50px;
+    font-size: 2rem;
+}
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 25px;
+}
+.product {
+    border: 3px solid #b30000;
+    border-radius: 12px;
+    background: white;
+    overflow: hidden;
+    transition: 0.3s;
+}
+.product:hover {
+    transform: scale(1.04);
+    box-shadow: 0 6px 25px rgba(0,0,0,0.25);
+}
+.product img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+}
+.product-info {
+    text-align: center;
+    padding: 12px;
+}
+.product-info h3 {
+    color: #006600;
+}
+.price {
+    color: #b30000;
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+.add-btn {
+    margin-top: 8px;
+    background: #006600;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+.add-btn:hover {
+    background: #b30000;
+}
+
+/* MUSIC BUTTON */
+#music-btn {
+    position: fixed;
+    left: 25px;
+    bottom: 25px;
+    width: 55px;
+    height: 55px;
+    background: rgba(255,255,255,0.75);
+    border: 2px solid rgba(255,0,0,0.6);
+    border-radius: 50%;
+    font-size: 27px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+    cursor: pointer;
+    box-shadow: 0 6px 25px rgba(0,0,0,0.25);
+    z-index: 99999;
+}
+
+/* SHOPPING CART (SMALL + SUBTLE) */
+#cart-bubble {
+    position: fixed;
+    right: 25px;
+    bottom: 25px;
+    width: 55px;
+    height: 55px;
+    background: rgba(255,255,255,0.75);
+    border-radius: 50%;
+    border: 2px solid rgba(255,0,0,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 27px;
+    backdrop-filter: blur(10px);
+    cursor: pointer;
+    z-index: 99999;
+    transition: 0.25s;
+}
+#cart-bubble:hover {
+    transform: scale(1.1);
+}
+#cart-panel {
+    position: fixed;
+    right: 25px;
+    bottom: 95px;
+    width: 260px;
+    padding: 15px;
+    background: rgba(255,255,255,0.9);
+    border: 2px solid rgba(255,0,0,0.6);
+    border-radius: 12px;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 6px 25px rgba(0,0,0,0.3);
+    display: none;
+    z-index: 99999;
+}
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    margin: 5px 0;
+    background: rgba(255,0,0,0.1);
+    padding: 6px;
+    border-radius: 6px;
+}
+.remove-btn {
+    background: #b30000;
+    border: none;
+    color: white;
+    padding: 3px 6px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.checkout-btn {
+    width: 100%;
+    margin-top: 10px;
+    padding: 10px;
+    background: linear-gradient(90deg, #b30000, #006600);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+}
+
+/* FOOTER */
+footer {
+    margin-top: 50px;
+    padding: 20px;
+    text-align: center;
+    background: #b30000;
+    color: white;
+}
+</style>
+</head>
+<body>
+
+<!-- LOGO -->
+<div class="logo">A'LA SANTA</div>
+
+<!-- NAV -->
+<nav>
+    <a href="#sweets">Sweets</a>
+    <a href="#chocolate">Chocolate</a>
+    <a href="#costumes">Costumes</a>
+    <a href="#decor">Decor</a>
+    <a href="#lights">Lights</a>
+    <a href="#wrapping">Wrapping</a>
+    <a href="#toys">Toys</a>
+</nav>
+
+<!-- COUNTDOWN -->
+<div class="countdown-container">
+    🎄 Christmas Countdown 🎄
+    <div id="countdown">Loading...</div>
+</div>
+
+<!-- BANNER -->
+<div class="banner">Where Christmas Dreams Come True ✨</div>
+
+<!-- MUSIC BUTTON -->
+<button id="music-btn">🎵</button>
+
+<!-- REAL CHRISTMAS MUSIC -->
+<audio id="music" loop>
+    <source src="https://cdn.pixabay.com/download/audio/2022/12/07/audio_27e6090f9630.mp3?filename=we-wish-you-a-merry-christmas-126169.mp3" type="audio/mpeg">
+</audio>
+
+<!-- CART BUTTON -->
+<div id="cart-bubble">🛒</div>
+
+<!-- CART PANEL -->
+<div id="cart-panel">
+    <h3 style="margin:0;color:#006600;">Your Cart</h3>
+    <div id="cart-items"></div>
+
+    <div style="margin-top:10px;font-weight:bold;">
+        Total: $<span id="total">0.00</span>
+    </div>
+
+    <button class="checkout-btn">Checkout</button>
+</div>
+
+<!-- PRODUCTS -->
+<div class="container">
+
+<!-- SWEETS -->
+<h2 id="sweets">🍬 Christmas Sweets</h2>
+<div class="product-grid">
+
+    <div class="product">
+        <img src="https://images.unsplash.com/photo-1543852786-1cf6624b9987">
+        <div class="product-info">
+            <h3>Candy Cane Bundle</h3>
+            <p class="price">4.99</p>
+            <button class="add-btn" onclick="addToCart('Candy Cane Bundle',4.99)">Add to Cart</button>
+        </div>
+    </div>
+
+    <div class="product">
+        <img src="https://images.unsplash.com/photo-1607083205675-cdf9b3c0e97f">
+        <div class="product-info">
+            <h3>Gingerbread Cookies</h3>
+            <p class="price">7.49</p>
+            <button class="add-btn" onclick="addToCart('Gingerbread Cookies',7.49)">Add to Cart</button>
+        </div>
+    </div>
+
+    <div class="product">
+        <img src="https://images.unsplash.com/photo-1517685352821-92cf88aee5a5">
+        <div class="product-info">
+            <h3>Snowflake Sugar Cookies</h3>
+            <p class="price">5.99</p>
+            <button class="add-btn" onclick="addToCart('Snowflake Sugar Cookies',5.99)">Add to Cart</button>
+        </div>
+    </div>
+
+</div>
+
+<!-- CHOCOLATE -->
+<h2 id="chocolate">🍫 Christmas Chocolate</h2>
+<div class="product-grid">
+
+    <div class="product">
+        <img src="https://images.unsplash.com/photo-1604429908599-8910f1c34443">
+        <div class="product-info">
+            <h3>Chocolate Santa</h3>
+            <p class="price">3.49</p>
+            <button class="add-btn" onclick="addToCart('Chocolate Santa',3.49)">Add to Cart</button>
+        </div>
+    </div>
+
+    <div class="product">
+        <img src="https://images.unsplash.com/photo-1511382402581-47a6b5f4a5b9">
+        <div class="product-info">
+            <h3>Luxury Truffle Box</h3>
+            <p class="price">14.99</p>
+            <button class="add-btn" onclick="addToCart('Luxury Truffle Box',14.99)">Add to Cart</button>
+        </div>
+    </div>
+
+</div>
+
+<!-- COSTUMES -->
+<h2 id="costumes">🎅 Christmas Costumes</h2>
+<div class="product-grid">
+
+    <div class="product">
+        <img src="https://images.unsplash.com/photo-1636041280596-5c84cf48b204">
+        <div class="product-info">
+            <h3>Santa Suit</h3>
+            <p class="price">29.99</p>
+            <button class="add-btn" onclick="addToCart('Santa Suit',29.99)">Add to Cart</button>
+        </div>
+    </div>
+
+    <div class="product">
+        <img src="https://images.unsplash.com/photo-1575932432565-7a3f01177a0c">
+        <div class="product-info">
+            <h3>Elf Outfit</h3>
+            <p class="price">22.50</p>
+            <button class="add-btn" onclick="addToCart('Elf Outfit',22.50)">Add to Cart</button>
+        </div>
+    </div>
+
+</div>
+
+</div>
+
+<footer>
+    © 2025 A’la Santa — All Rights Reserved
+</footer>
+
+<script>
+/* COUNTDOWN */
+function updateCountdown() {
+    const xmas = new Date("December 25, 2025").getTime();
+    const now = Date.now();
+    const diff = xmas - now;
+
+    if (diff <= 0) {
+        countdown.innerHTML = "🎅 Merry Christmas!";
+        return;
+    }
+
+    const d = Math.floor(diff / (1000*60*60*24));
+    const h = Math.floor((diff%(1000*60*60*24))/(1000*60*60));
+    const m = Math.floor((diff%(1000*60*60))/(1000*60));
+    const s = Math.floor((diff%(1000*60))/1000);
+
+    countdown.innerHTML = `${d}d ${h}h ${m}m ${s}s`;
+}
+setInterval(updateCountdown, 1000);
+
+/* SHOPPING CART */
+let total = 0;
+
+document.getElementById("cart-bubble").onclick = () => {
+    const p = document.getElementById("cart-panel");
+    p.style.display = p.style.display === "block" ? "none" : "block";
+};
+
+function addToCart(name, price) {
+    const container = document.getElementById("cart-items");
+    const item = document.createElement("div");
+    item.className = "cart-item";
+    item.innerHTML = `
+        <span>${name} - $${price.toFixed(2)}</span>
+        <button class="remove-btn" onclick="removeItem(this,${price})">x</button>
+    `;
+    container.appendChild(item);
+
+    total += price;
+    document.getElementById("total").innerText = total.toFixed(2);
+}
+
+function removeItem(btn, price) {
+    btn.parentElement.remove();
+    total -= price;
+    if (total < 0) total = 0;
+    document.getElementById("total").innerText = total.toFixed(2);
+}
+
+/* MUSIC BUTTON */
+const musicBtn = document.getElementById("music-btn");
+const music = document.getElementById("music");
+let playing = false;
+
+musicBtn.onclick = () => {
+    if (!playing) {
+        music.play();
+        musicBtn.textContent = "⏸";
+    } else {
+        music.pause();
+        musicBtn.textContent = "🎵";
+    }
+    playing = !playing;
+};
+
+/* SNOWFALL */
+function createSnowflake() {
+    const snow = document.createElement("div");
+    snow.className = "snowflake";
+    snow.innerHTML = "❄";
+    snow.style.left = Math.random()*100 + "vw";
+    snow.style.animationDuration = 4 + Math.random()*4 + "s";
+    snow.style.opacity = Math.random();
+    document.body.appendChild(snow);
+    setTimeout(()=>snow.remove(),8000);
+}
+setInterval(createSnowflake,150);
+</script>
+
+</body>
+</html>
